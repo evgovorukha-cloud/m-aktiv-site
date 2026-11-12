@@ -439,3 +439,42 @@ p { margin: 0; }
   .cat-card { min-height: 0; }
   .req td:first-child { width: 44%; }
 }
+
+/* ---------- главная: первый экран ---------- */
+.hero { position: relative; background: var(--paper); overflow: hidden; border-bottom: 1px solid var(--line); }
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: linear-gradient(var(--ice-2) 1px, transparent 1px), linear-gradient(90deg, var(--ice-2) 1px, transparent 1px);
+  background-size: 64px 64px; opacity: .5;
+  mask-image: linear-gradient(90deg, #000 0%, transparent 55%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 55%);
+}
+.hero__grid { position: relative; display: grid; grid-template-columns: 1.08fr 1fr; gap: clamp(28px, 4vw, 64px); align-items: center; padding: clamp(40px, 6vw, 88px) 0 0; }
+.hero h1 { font-size: clamp(46px, 7.4vw, 104px); line-height: .95; margin-top: 20px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero__lead { margin-top: 26px; font-size: clamp(17px, 1.6vw, 20px); max-width: 46ch; color: var(--ink-2); }
+.hero__actions { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
+.hero__media { position: relative; align-self: stretch; min-height: 420px; }
+.hero__media img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%, 0 14%);
+}
+.hero__chip {
+  position: absolute; left: -12px; bottom: 32px; background: var(--ink); color: #fff; padding: 16px 20px; max-width: 260px;
+  box-shadow: var(--shadow);
+}
+.hero__chip b { font-family: var(--f-display); font-size: 34px; font-weight: 500; display: block; line-height: 1; }
+.hero__chip span { font-size: 13px; color: #A9B7C8; }
+.hero__flow { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 34px; font-family: var(--f-display); font-size: 18px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.hero__flow i { font-style: normal; color: var(--olive); }
+.hero .pulse-line { margin-top: clamp(24px, 4vw, 48px); }
+
+.trust { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: center; padding: 22px 0 30px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.trust b { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 860px) {
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__media { min-height: 0; aspect-ratio: 16/10; }
+  .hero__chip { left: 12px; bottom: 12px; padding: 12px 14px; }
+  .hero__chip b { font-size: 26px; }
+}
