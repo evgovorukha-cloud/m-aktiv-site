@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Каталог медицинского оборудования — М-Актив</title>
+  <meta name="description" content="Каталог медицинского оборудования М-Актив: УЗИ, КТ, МРТ, рентген, ангиография, ядерная медицина, мониторинг, ИВЛ. Цены — по запросу коммерческого предложения.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="catalog">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <nav class="crumbs"><a href="index.html">Главная</a><span>/</span>Каталог</nav>
+        <h1>Каталог оборудования</h1>
+        <p class="page-hero__lead">12 направлений — от УЗИ до тяжёлой диагностической техники. Мы не публикуем цены: стоимость зависит от комплектации, доставки и монтажа. Нажмите «Получить КП» — подготовим расчёт под ваш проект.</p>
+      </div>
+    </section>
+
+    <section class="section section--ice" style="padding-top:clamp(40px,5vw,64px)">
+      <div class="wrap">
+        <div class="cat-grid" id="all-cats"></div>
+        <div class="note">Не нашли нужное оборудование? Мы работаем с ведущими мировыми производителями и подберём решение под задачу клиники. <a href="#" data-kp style="color:var(--accent);text-decoration:underline">Оставьте запрос</a> или позвоните <a href="tel:+79882424236" style="color:var(--accent)">+7 (988) 242-42-36</a>.</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/catalog-data.js"></script>
+  <script src="assets/js/layout.js"></script>
+  <script>
+    document.getElementById("all-cats").innerHTML = CATALOG.map((c, i) => {
+      const subs = c.subs.filter(s => s.name).map(s => s.name);
+      const count = c.subs.reduce((s, x) => s + x.items.length, 0);
+      return `
+      <a class="cat-card" href="category.html?c=${c.id}">
+        <span class="cat-card__num">${String(i + 1).padStart(2, "0")} / ${c.short}</span>
+        <span class="cat-card__arrow">↗</span>
+        <span class="cat-card__icon">${ICONS[c.icon]}</span>
+        <h3>${c.name}</h3>
+        <p>${subs.length ? subs.join(" · ") : c.lead}</p>
+        <span class="cat-card__more">${count} позиций</span>
+      </a>`;
+    }).join("");
+    initLayout();
+  </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Каталог — М-Актив</title>
+  <meta name="description" content="Медицинское оборудование М-Актив: поставка, монтаж и сервис. Цены по запросу коммерческого предложения.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="catalog">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <nav class="crumbs"><a href="index.html">Главная</a><span>/</span><a href="catalog.html">Каталог</a><span>/</span><b id="crumb-name" style="font-weight:400"></b></nav>
+        <h1 id="cat-title"></h1>
+        <p class="page-hero__lead" id="cat-lead"></p>
+        <div class="hero__actions"><button class="btn btn--primary" id="cat-kp" data-kp>Получить КП на направление</button></div>
+      </div>
+    </section>
+
+    <section class="section section--ice" style="padding-top:clamp(40px,5vw,64px)">
+      <div class="wrap">
+        <div class="subnav" id="cat-switch"></div>
+        <div id="cat-body"></div>
+        <div class="note">Модели в каталоге — ориентир. Мы подберём комплектацию под задачу клиники и рассчитаем полную стоимость: оборудование, доставка, монтаж, обучение и сервис.</div>
+      </div>
+    </section>
+
+    <section class="section cta">
+      <div class="wrap">
+        <div>
+          <span class="label" style="color:var(--olive-soft)">Под ключ</span>
+          <h2>Поставим, смонтируем и возьмём на сервис</h2>
+          <p>Проект помещения, доставка, монтаж, обучение персонала и гарантийное обслуживание — в одном договоре.</p>
+        </div>
+        <div class="cta__actions">
+          <button class="btn btn--light" data-kp>Получить КП</button>
+          <a class="cta__contact" href="tel:+79882424236">+7 (988) 242-42-36</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/catalog-data.js"></script>
+  <script src="assets/js/layout.js"></script>
+  <script>
+    const id = new URLSearchParams(location.search).get("c");
+    const cat = CATALOG.find(c => c.id === id) || CATALOG[0];
+    const esc = s => String(s).replace(/"/g, "&quot;");
+
+    document.title = `${cat.name} — купить с монтажом и сервисом | М-Актив`;
+    document.getElementById("crumb-name").textContent = cat.name;
+    document.getElementById("cat-title").textContent = cat.name;
+    document.getElementById("cat-lead").textContent = cat.lead;
+    document.getElementById("cat-kp").dataset.kp = cat.name;
+
+    // переключатель направлений
+    document.getElementById("cat-switch").innerHTML = CATALOG.map(c =>
+      `<a class="chip ${c.id === cat.id ? "is-active" : ""}" href="category.html?c=${c.id}">${c.short}</a>`).join("");
+
+    // карточки оборудования по подразделам
+    const card = it => {
+      const title = it.brand && it.brand !== "—" ? `${it.brand} ${it.model}` : it.model;
+      const visual = it.img ? `<img src="${it.img}" alt="${esc(title)}" loading="lazy">` : ICONS[cat.icon];
+      return `
+      <article class="prod">
+        <div class="prod__visual">
+          ${it.brand && it.brand !== "—" ? `<span class="prod__brand">${it.brand}</span>` : ""}
+          ${visual}
+        </div>
+        <div class="prod__body">
+          <span class="prod__type">${it.type}</span>
+          <h3>${it.model}</h3>
+          <p class="prod__desc">${it.desc}</p>
+          <span class="prod__price">Цена — по запросу</span>
+          <button class="btn btn--primary btn--sm btn--block" data-kp="${esc(title)}">Получить КП</button>
+        </div>
+      </article>`;
+    };
+
+    document.getElementById("cat-body").innerHTML = cat.subs.map(s => `
+      <div class="sub-block">
+        ${s.name ? `<h2>${s.name} <small>${s.items.length} поз.</small></h2>` : ""}
+        <div class="prod-grid">${s.items.map(card).join("")}</div>
+      </div>`).join("");
+
+    initLayout();
+  </script>
+</body>
+</html>
