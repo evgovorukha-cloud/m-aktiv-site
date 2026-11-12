@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Услуги: подбор, доставка, монтаж, обучение — М-Актив</title>
+  <meta name="description" content="Услуги М-Актив: подбор медицинского оборудования, проектирование помещений, доставка по России, монтаж и запуск, обучение персонала, сервис и trade-in.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="services">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <nav class="crumbs"><a href="index.html">Главная</a><span>/</span>Услуги</nav>
+        <h1>Поставка — только один этап</h1>
+        <p class="page-hero__lead">«М-Актив» сопровождает оборудование до установки, во время запуска и после ввода в эксплуатацию. Вы получаете одного ответственного партнёра вместо пяти подрядчиков.</p>
+        <div class="hero__flow">Проект <i>→</i> Помещение <i>→</i> Поставка <i>→</i> Логистика <i>→</i> Монтаж <i>→</i> Обучение <i>→</i> Сервис</div>
+      </div>
+    </section>
+
+    <div id="svc-list"></div>
+
+    <!-- Trade-in -->
+    <section class="section section--dark">
+      <div class="wrap split">
+        <div class="split__media reveal">
+          <img src="assets/img/trade-in.jpg" alt="Обмен старого УЗИ-аппарата на новый">
+          <div class="tag" style="background:var(--olive)">Trade-in</div>
+        </div>
+        <div class="reveal">
+          <span class="label" style="color:var(--olive-soft)">07 · Trade-in</span>
+          <h2>Старое оборудование поможет перейти на новое</h2>
+          <p>Учтём стоимость вашего оборудования при покупке нового решения. Оценим состояние, предложим замену и возьмём на себя демонтаж.</p>
+          <p>Если оборудование не подходит под задачи клиники — мы его заменим.</p>
+          <div class="hero__actions"><button class="btn btn--light" data-kp="Trade-in: обмен оборудования">Оценить оборудование</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta">
+      <div class="wrap">
+        <div class="reveal">
+          <span class="label" style="color:var(--olive-soft)">Запрос</span>
+          <h2>Обсудим ваш проект</h2>
+          <p>Расскажите, какое оборудование нужно и где будет кабинет — рассчитаем поставку, монтаж и сервис.</p>
+        </div>
+        <div class="cta__actions reveal">
+          <button class="btn btn--light" data-kp>Получить КП</button>
+          <a class="cta__contact" href="tel:+79882424236">+7 (988) 242-42-36</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/catalog-data.js"></script>
+  <script src="assets/js/services-data.js"></script>
+  <script src="assets/js/layout.js"></script>
+  <script>
+    document.getElementById("svc-list").innerHTML = SERVICES.map((s, i) => `
+      <section class="section ${i % 2 ? "section--ice" : "section--white"}" id="${s.id}">
+        <div class="wrap split ${i % 2 ? "split--rev" : ""}">
+          <div class="split__media reveal">
+            <img src="${s.img}" alt="${s.title}" loading="lazy">
+            <div class="tag">${String(i + 1).padStart(2, "0")} · ${s.title}</div>
+          </div>
+          <div class="reveal">
+            <span class="label">${String(i + 1).padStart(2, "0")} · Услуга</span>
+            <h2>${s.title}</h2>
+            <p>${s.short}</p>
+            <ul class="checklist">${s.points.map(p => `<li>${p}</li>`).join("")}</ul>
+            <div class="hero__actions"><button class="btn btn--primary" data-kp="Услуга: ${s.title}">Обсудить задачу</button></div>
+          </div>
+        </div>
+      </section>`).join("");
+    initLayout();
+  </script>
+</body>
+</html>
