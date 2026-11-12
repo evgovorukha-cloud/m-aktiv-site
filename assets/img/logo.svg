@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 64" fill="none">
+  <path d="M2 54H22L36 4L52 50L60 34L70 54H226" stroke="#707D3A" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="78" cy="38" r="2.6" fill="#0E1A2B"/>
+  <text x="86" y="46" font-family="Golos Text, Arial, sans-serif" font-size="26" letter-spacing="2" fill="#0E1A2B">АКТИВ</text>
+</svg>
