@@ -149,18 +149,20 @@ function renderModal() {
         </div>
         <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email"></label>
         <label class="field"><span>Организация, город, комментарий</span><textarea name="comment"></textarea></label>
-        <label class="consent"><input type="checkbox" name="agree" required><span>Согласен(а) на обработку персональных данных согласно <a href="privacy.html" target="_blank">политике</a></span></label>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <label class="consent"><input type="checkbox" name="agree" value="1" required><span>Согласен(а) на обработку персональных данных согласно <a href="privacy.html" target="_blank">политике</a></span></label>
         <button class="btn btn--accent btn--block" type="submit">Отправить запрос ${ARROW}</button>
       </form>
       <div class="form__ok">
-        <h3>Почти готово</h3>
-        <p>Открылось письмо с вашей заявкой — нажмите «Отправить» в почте.<br>Или позвоните: <a href="${SITE.phoneHref}" style="color:var(--accent)">${SITE.phone}</a></p>
+        <h3 id="kp-ok-title">Заявка отправлена</h3>
+        <p id="kp-ok-text">Мы свяжемся с вами в ближайшее рабочее время.</p>
+        <p style="margin-top:10px">Срочный вопрос? Позвоните: <a href="${SITE.phoneHref}" style="color:var(--accent)">${SITE.phone}</a></p>
       </div>
     </div>`;
   document.body.appendChild(wrap);
 
   const form = wrap.querySelector("#kp-form");
-  form.addEventListener("submit", e => {
+  form.addEventListener("submit", async e => {
     e.preventDefault();
     const d = new FormData(form);
     if (!d.get("name") || !d.get("phone") || !d.get("agree")) {
@@ -179,7 +181,30 @@ function renderModal() {
       `Комментарий: ${d.get("comment") || "—"}`,
     ].join("\n");
     const subject = `Запрос КП с сайта: ${d.get("item") || "оборудование"}`;
-    window.location.href = `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const btn = form.querySelector("button[type=submit]");
+    btn.disabled = true;
+    d.append("page", location.href);
+
+    // 1) пробуем отправить через сервер (send.php на хостинге)
+    let sent = false;
+    if (location.protocol.startsWith("http")) {
+      try {
+        const r = await fetch("send.php", { method: "POST", body: d });
+        const j = await r.json();
+        sent = r.ok && j.ok;
+      } catch (_) { sent = false; }
+    }
+    // 2) если сервера нет — открываем готовое письмо в почте
+    if (!sent) {
+      window.location.href = `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      document.getElementById("kp-ok-title").textContent = "Почти готово";
+      document.getElementById("kp-ok-text").textContent = "Открылось письмо с вашей заявкой — нажмите «Отправить» в почте.";
+    } else {
+      document.getElementById("kp-ok-title").textContent = "Заявка отправлена";
+      document.getElementById("kp-ok-text").textContent = "Мы свяжемся с вами в ближайшее рабочее время.";
+      form.reset();
+    }
+    btn.disabled = false;
     form.classList.add("is-sent");
   });
 }
