@@ -150,7 +150,7 @@ function renderModal() {
         <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email"></label>
         <label class="field"><span>Организация, город, комментарий</span><textarea name="comment"></textarea></label>
         <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-        <label class="consent"><input type="checkbox" name="agree" value="1" required><span>Согласен(а) на обработку персональных данных согласно <a href="privacy.html" target="_blank">политике</a></span></label>
+        <label class="consent"><input type="checkbox" name="agree" value="1" required><span>Даю <a href="consent.html" target="_blank">согласие на обработку персональных данных</a>. С <a href="privacy.html" target="_blank">политикой</a> ознакомлен(а)</span></label>
         <button class="btn btn--accent btn--block" type="submit">Отправить запрос ${ARROW}</button>
       </form>
       <div class="form__ok">
