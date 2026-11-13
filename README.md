@@ -16,6 +16,7 @@
 - `privacy.html` — политика персональных данных (черновик, проверить у юриста)
 
 ## Где что менять
+- Лицензии — `assets/js/layout.js`, `SITE.licenses` (блок появится сам)
 - Телефон, почта, адрес — `assets/js/layout.js`, объект `SITE` (+ вручную в блоках «Призыв» на страницах и в `contacts.html`)
 - Модели в каталоге — `assets/js/catalog-data.js`
 - Услуги — `assets/js/services-data.js`
