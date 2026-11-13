@@ -9,7 +9,17 @@ const SITE = {
   city: "Краснодар",
   address: "350063, г. Краснодар, ул. Кубанская Набережная, д. 5/8, офис 58",
   legal: "ООО «М-АКТИВ»",
+  /* Лицензии: впишите номера — блок появится в подвале и на странице «Контакты».
+     Пример: { title: "Лицензия на техническое обслуживание медицинской техники", number: "№ ... от ...", issuer: "Росздравнадзор" } */
+  licenses: [],
 };
+
+const MED_WARNING = "Имеются противопоказания. Необходимо ознакомиться с инструкцией по применению или получить консультацию специалиста.";
+
+function licensesHTML() {
+  return SITE.licenses.map(l =>
+    `<li><b>${l.title}</b> ${l.number}${l.issuer ? ` (${l.issuer})` : ""}</li>`).join("");
+}
 
 const NAV = [
   { href: "catalog.html", label: "Каталог", page: "catalog" },
@@ -119,9 +129,11 @@ function renderFooter() {
           <button class="btn btn--light btn--sm" data-kp style="margin-top:20px">Получить КП</button>
         </div>
       </div>
+      ${SITE.licenses.length ? `<ul class="footer__licenses">${licensesHTML()}</ul>` : ""}
+      <p class="med-warning">${MED_WARNING}</p>
       <div class="footer__bottom">
         <span>© ${new Date().getFullYear()} ${SITE.legal}. Информация на сайте не является публичной офертой.</span>
-        <a href="privacy.html">Политика обработки персональных данных</a>
+        <span class="footer__docs"><a href="privacy.html">Политика обработки персональных данных</a><a href="consent.html">Согласие на обработку данных</a></span>
       </div>
     </div>
   </footer>`;

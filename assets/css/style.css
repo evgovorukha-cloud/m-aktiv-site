@@ -478,3 +478,16 @@ p { margin: 0; }
   .hero__chip { left: 12px; bottom: 12px; padding: 12px 14px; }
   .hero__chip b { font-size: 26px; }
 }
+
+/* ---------- предупреждение для медизделий и лицензии ---------- */
+.med-warning {
+  margin-top: 40px; padding: 16px 20px; border: 1px solid rgba(255, 255, 255, .18);
+  font-family: var(--f-display); font-size: clamp(14px, 1.6vw, 17px); letter-spacing: .06em; text-transform: uppercase;
+  color: #D7E1EC; line-height: 1.35; text-align: center;
+}
+.footer__licenses { list-style: none; padding: 0; margin: 40px 0 0; display: grid; gap: 6px; font-size: 13px; color: #8FA1B6; }
+.footer__licenses b { color: #C9D5E2; font-weight: 500; }
+.footer__docs { display: flex; gap: 20px; flex-wrap: wrap; }
+.footer__bottom a:hover { color: #fff; }
+.lic-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 15px; }
+.lic-list b { color: var(--ink); font-weight: 500; }

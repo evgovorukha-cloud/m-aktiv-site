@@ -55,6 +55,10 @@
             </table>
           </div>
         </div>
+        <div class="contact-card reveal" id="lic-block" style="margin-top:20px" hidden>
+          <h3>Лицензии</h3>
+          <ul class="lic-list" id="lic-list"></ul>
+        </div>
       </div>
     </section>
 
@@ -71,6 +75,12 @@
 
   <script src="assets/js/catalog-data.js"></script>
   <script src="assets/js/layout.js"></script>
-  <script>initLayout();</script>
+  <script>
+    if (SITE.licenses.length) {
+      document.getElementById("lic-list").innerHTML = licensesHTML();
+      document.getElementById("lic-block").hidden = false;
+    }
+    initLayout();
+  </script>
 </body>
 </html>
