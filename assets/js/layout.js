@@ -14,6 +14,14 @@ const SITE = {
   licenses: [],
 };
 
+/* Копия для показа на GitHub Pages не должна попадать в поиск (основной сайт — maktiv.ru) */
+if (/\.github\.io$/.test(location.hostname)) {
+  const m = document.createElement("meta");
+  m.name = "robots";
+  m.content = "noindex, nofollow";
+  document.head.appendChild(m);
+}
+
 const MED_WARNING = "Имеются противопоказания. Необходимо ознакомиться с инструкцией по применению или получить консультацию специалиста.";
 
 function licensesHTML() {
