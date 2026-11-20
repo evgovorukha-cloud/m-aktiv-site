@@ -162,7 +162,7 @@ function renderModal() {
       <h2 id="kp-title">Получить КП</h2>
       <p class="modal__sub">Подберём оборудование под задачу и бюджет, рассчитаем поставку, монтаж и сервис.</p>
       <form class="form" id="kp-form" novalidate>
-        <label class="field"><span>Оборудование</span><input name="item" id="kp-item" placeholder="Например: аппарат УЗИ экспертного класса"></label>
+        <label class="field"><span>Оборудование</span><input name="item" id="kp-item" placeholder="Например: аппарат УЗИ для женской консультации"></label>
         <div class="form__row">
           <label class="field"><span>Имя *</span><input name="name" required autocomplete="name"></label>
           <label class="field"><span>Телефон *</span><input name="phone" type="tel" required autocomplete="tel"></label>

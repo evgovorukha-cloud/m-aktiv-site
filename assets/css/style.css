@@ -491,3 +491,6 @@ p { margin: 0; }
 .footer__bottom a:hover { color: #fff; }
 .lic-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 15px; }
 .lic-list b { color: var(--ink); font-weight: 500; }
+
+/* преимущества словами вместо цифр */
+.stat__num--word { font-size: clamp(26px, 3vw, 40px); line-height: 1.05; text-transform: uppercase; font-weight: 500; }
