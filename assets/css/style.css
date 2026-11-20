@@ -555,3 +555,7 @@ p { margin: 0; }
   .header .wrap { gap: 18px; }
   .nav a { padding: 10px 10px; }
 }
+@media (max-width: 560px) {
+  .trust { gap: 8px 18px; }
+  .trust span { width: 100%; }
+}
