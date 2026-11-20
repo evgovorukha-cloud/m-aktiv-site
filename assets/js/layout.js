@@ -9,6 +9,7 @@ const SITE = {
   city: "Краснодар",
   address: "350063, г. Краснодар, ул. Кубанская Набережная, д. 5/8, офис 58",
   legal: "ООО «М-АКТИВ»",
+  hours: "Пн–Пт 9:00–18:00, Сб–Вс — выходной",
   /* Лицензии: впишите номера — блок появится в подвале и на странице «Контакты».
      Пример: { title: "Лицензия на техническое обслуживание медицинской техники", number: "№ ... от ...", issuer: "Росздравнадзор" } */
   licenses: [],
@@ -83,6 +84,7 @@ function renderHeader() {
       <div class="topbar__left">
         <span class="topbar__badge">Поставка · Монтаж · Сервис</span>
         <span>${SITE.city} — работаем по всей России</span>
+        <span>${SITE.hours}</span>
       </div>
       <div class="topbar__right">
         <a href="mailto:${SITE.email}">${SITE.email}</a>
@@ -102,6 +104,7 @@ function renderHeader() {
     ${mLinks}
     <div class="mm-contacts">
       <a href="${SITE.phoneHref}">${SITE.phone}</a>
+      <span style="font-size:15px;color:var(--muted)">${SITE.hours}</span>
       <a href="mailto:${SITE.email}">${SITE.email}</a>
     </div>
     <button class="btn btn--primary btn--block" data-kp>Получить КП</button>
@@ -134,6 +137,7 @@ function renderFooter() {
           <a class="footer__contact" href="${SITE.phoneHref}">${SITE.phone}</a>
           <a class="footer__contact" href="mailto:${SITE.email}" style="font-size:18px;margin-top:6px">${SITE.email}</a>
           <p style="margin-top:14px">${SITE.address}</p>
+          <p style="margin-top:6px">${SITE.hours}</p>
           <button class="btn btn--light btn--sm" data-kp style="margin-top:20px">Получить КП</button>
         </div>
       </div>
