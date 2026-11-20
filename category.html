@@ -69,7 +69,7 @@
       const title = it.brand && it.brand !== "—" ? `${it.brand} ${it.model}` : it.model;
       const visual = it.img ? `<img src="${it.img}" alt="${esc(title)}" loading="lazy">` : ICONS[cat.icon];
       return `
-      <article class="prod">
+      <article class="prod" data-slug="${itemSlug(it)}">
         <div class="prod__visual">
           ${it.brand && it.brand !== "—" ? `<span class="prod__brand">${it.brand}</span>` : ""}
           ${visual}
@@ -91,6 +91,13 @@
       </div>`).join("");
 
     initLayout();
+
+    // подсветить модель, найденную через поиск
+    const hit = new URLSearchParams(location.search).get("item");
+    if (hit) {
+      const el = [...document.querySelectorAll(".prod")].find(p => p.dataset.slug === hit);
+      if (el) { el.classList.add("prod--hit"); setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 250); }
+    }
   </script>
 </body>
 </html>

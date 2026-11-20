@@ -72,6 +72,97 @@ const ICONS = {
   parts: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="24" cy="24" r="7"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M10 10l4 4M34 34l4 4M10 38l4-4M34 14l4-4"/></svg>',
 };
 
+const SEARCH_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>`;
+
+/* ---------- поиск по каталогу ---------- */
+const norm = s => String(s || "").toLowerCase().replace(/ё/g, "е");
+const escHTML = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+function itemTitle(it) { return it.brand && it.brand !== "—" ? `${it.brand} ${it.model}` : it.model; }
+function itemSlug(it) { return norm(itemTitle(it)).replace(/[^a-z0-9а-я]+/g, "-").replace(/^-|-$/g, ""); }
+
+let SEARCH_INDEX = null;
+function buildSearchIndex() {
+  const idx = [];
+  (window.CATALOG || []).forEach(c => {
+    idx.push({ kind: "cat", c, text: norm([c.name, c.short, c.lead, ...c.subs.map(x => x.name || "")].join(" ")) });
+    c.subs.forEach(sub => sub.items.forEach(it => idx.push({
+      kind: "item", c, it, text: norm([it.brand, it.model, it.type, it.desc, sub.name || "", c.name, c.short].join(" ")),
+    })));
+  });
+  return idx;
+}
+function runSearch(q) {
+  const words = norm(q).split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+  SEARCH_INDEX = SEARCH_INDEX || buildSearchIndex();
+  return SEARCH_INDEX.filter(e => words.every(w => e.text.includes(w)));
+}
+function renderSearchResults(q) {
+  const box = document.getElementById("search-results");
+  if (norm(q).trim().length < 2) {
+    box.innerHTML = `<p class="search__hint">Введите модель, бренд или тип оборудования — например, «Philips», «томограф», «ИВЛ».</p>
+      <div class="search__chips">${(window.CATALOG || []).map(c => `<a class="chip" href="category.html?c=${c.id}">${c.short}</a>`).join("")}</div>`;
+    return;
+  }
+  const found = runSearch(q);
+  const cats = found.filter(e => e.kind === "cat").slice(0, 4);
+  const items = found.filter(e => e.kind === "item").slice(0, 12);
+  if (!cats.length && !items.length) {
+    box.innerHTML = `<div class="search__empty"><p>По запросу «${escHTML(q)}» ничего не нашлось.</p>
+      <p>Мы работаем с ведущими производителями — подберём оборудование под задачу.</p>
+      <button class="btn btn--primary btn--sm" data-kp="${escHTML(q)}">Запросить КП</button></div>`;
+    return;
+  }
+  box.innerHTML =
+    (cats.length ? `<div class="search__group"><span class="search__label">Направления</span>${cats.map(e => `
+      <a class="search__row" href="category.html?c=${e.c.id}">
+        <span class="search__ico">${ICONS[e.c.icon]}</span>
+        <span><b>${e.c.name}</b><small>${e.c.subs.reduce((n, x) => n + x.items.length, 0)} позиций</small></span>
+      </a>`).join("")}</div>` : "") +
+    (items.length ? `<div class="search__group"><span class="search__label">Оборудование</span>${items.map(e => `
+      <a class="search__row" href="category.html?c=${e.c.id}&item=${encodeURIComponent(itemSlug(e.it))}">
+        <span class="search__ico">${ICONS[e.c.icon]}</span>
+        <span><b>${itemTitle(e.it)}</b><small>${e.it.type} · ${e.c.short}</small></span>
+      </a>`).join("")}</div>` : "");
+}
+function renderSearch() {
+  const el = document.createElement("div");
+  el.className = "search";
+  el.id = "search-panel";
+  el.setAttribute("role", "dialog");
+  el.setAttribute("aria-label", "Поиск по каталогу");
+  el.innerHTML = `
+    <div class="search__overlay" data-search-close></div>
+    <div class="search__box">
+      <div class="wrap">
+        <div class="search__field">
+          ${SEARCH_ICON}
+          <input type="search" id="search-input" placeholder="Поиск по каталогу: модель, бренд, тип оборудования" autocomplete="off" aria-label="Поиск по каталогу">
+          <button class="search__close" data-search-close aria-label="Закрыть поиск">×</button>
+        </div>
+        <div class="search__results" id="search-results"></div>
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+  el.querySelector("#search-input").addEventListener("input", e => renderSearchResults(e.target.value));
+}
+function openSearch(q = "") {
+  const p = document.getElementById("search-panel");
+  const input = p.querySelector("#search-input");
+  input.value = q;
+  renderSearchResults(q);
+  p.classList.add("is-open");
+  document.body.classList.remove("menu-open");
+  document.body.style.overflow = "hidden";
+  setTimeout(() => input.focus(), 30);
+}
+function closeSearch() {
+  const p = document.getElementById("search-panel");
+  if (!p || !p.classList.contains("is-open")) return;
+  p.classList.remove("is-open");
+  document.body.style.overflow = "";
+}
+
 function renderHeader() {
   const page = document.body.dataset.page || "";
   const links = NAV.map(n => `<a href="${n.href}" class="${n.page === page ? "is-active" : ""}">${n.label}</a>`).join("");
@@ -95,6 +186,7 @@ function renderHeader() {
     <div class="wrap">
       <a href="index.html" class="logo" aria-label="М-Актив — на главную">${LOGO_SVG}</a>
       <nav class="nav" aria-label="Главное меню">${links}</nav>
+      <button class="search-btn" data-search aria-label="Поиск по каталогу" title="Поиск по каталогу">${SEARCH_ICON}<span>Поиск</span></button>
       <a class="header__phone" href="${SITE.phoneHref}">${SITE.phone}</a>
       <button class="btn btn--primary btn--sm" data-kp>Получить КП</button>
       <button class="burger" aria-label="Открыть меню" aria-expanded="false"><span></span></button>
@@ -253,17 +345,20 @@ function bindUI() {
     if (kp) {
       e.preventDefault();
       document.body.classList.remove("menu-open");
+      closeSearch();
       openKP(kp.dataset.kp);
       return;
     }
     if (e.target.closest("[data-close]")) closeKP();
+    if (e.target.closest("[data-search]")) { e.preventDefault(); openSearch(e.target.closest("[data-search]").dataset.search || ""); return; }
+    if (e.target.closest("[data-search-close]")) closeSearch();
     const burger = e.target.closest(".burger");
     if (burger) {
       const open = document.body.classList.toggle("menu-open");
       burger.setAttribute("aria-expanded", open);
     }
   });
-  document.addEventListener("keydown", e => { if (e.key === "Escape") closeKP(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeKP(); closeSearch(); } });
 
   // плавное появление блоков при прокрутке
   const els = document.querySelectorAll(".reveal");
@@ -281,5 +376,6 @@ function initLayout() {
   renderHeader();
   renderFooter();
   renderModal();
+  renderSearch();
   bindUI();
 }
