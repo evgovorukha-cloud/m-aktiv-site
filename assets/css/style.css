@@ -559,3 +559,10 @@ p { margin: 0; }
   .trust { gap: 8px 18px; }
   .trust span { width: 100%; }
 }
+
+/* фильтр по производителю на странице направления */
+.brand-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -16px 0 40px; }
+.brand-filter__label { font-family: var(--f-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-right: 6px; }
+.brand-filter .chip { background: transparent; }
+.brand-filter .chip.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.prod[hidden], .sub-block[hidden] { display: none; }

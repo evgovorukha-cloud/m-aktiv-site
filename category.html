@@ -25,8 +25,9 @@
     <section class="section section--ice" style="padding-top:clamp(40px,5vw,64px)">
       <div class="wrap">
         <div class="subnav" id="cat-switch"></div>
+        <div class="brand-filter" id="brand-filter" hidden></div>
         <div id="cat-body"></div>
-        <div class="note">Модели в каталоге — ориентир. Мы поставляем медицинские изделия, зарегистрированные в Российской Федерации; наличие регистрационного удостоверения уточняйте у менеджера. Подберём комплектацию под задачу клиники и рассчитаем полную стоимость: оборудование, доставка, монтаж, обучение и сервис.</div>
+        <div class="note">Наличие, сроки поставки и комплектацию уточняйте у менеджера. Мы поставляем медицинские изделия, зарегистрированные в Российской Федерации; наличие регистрационного удостоверения уточняйте у менеджера. Подберём комплектацию под задачу клиники и рассчитаем полную стоимость: оборудование, доставка, монтаж, обучение и сервис.</div>
       </div>
     </section>
 
@@ -69,7 +70,7 @@
       const title = it.brand && it.brand !== "—" ? `${it.brand} ${it.model}` : it.model;
       const visual = it.img ? `<img src="${it.img}" alt="${esc(title)}" loading="lazy">` : ICONS[cat.icon];
       return `
-      <article class="prod" data-slug="${itemSlug(it)}">
+      <article class="prod" data-slug="${itemSlug(it)}" data-brand="${esc(it.brand)}">
         <div class="prod__visual">
           ${it.brand && it.brand !== "—" ? `<span class="prod__brand">${it.brand}</span>` : ""}
           ${visual}
@@ -77,7 +78,7 @@
         <div class="prod__body">
           <span class="prod__type">${it.type}</span>
           <h3>${it.model}</h3>
-          <p class="prod__desc">${it.desc}</p>
+          ${it.desc ? `<p class="prod__desc">${it.desc}</p>` : ""}
           <span class="prod__price">Цена — по запросу</span>
           <button class="btn btn--primary btn--sm btn--block" data-kp="${esc(title)}">Получить КП</button>
         </div>
@@ -86,9 +87,35 @@
 
     document.getElementById("cat-body").innerHTML = cat.subs.map(s => `
       <div class="sub-block">
-        ${s.name ? `<h2>${s.name} <small>${s.items.length} поз.</small></h2>` : ""}
+        ${s.name ? `<h2>${s.name} <small data-count>${s.items.length} поз.</small></h2>` : ""}
         <div class="prod-grid">${s.items.map(card).join("")}</div>
       </div>`).join("");
+
+    // фильтр по производителю
+    const brandCount = {};
+    cat.subs.forEach(s => s.items.forEach(it => { if (it.brand && it.brand !== "—") brandCount[it.brand] = (brandCount[it.brand] || 0) + 1; }));
+    const brands = Object.keys(brandCount);
+    if (brands.length > 1) {
+      const bf = document.getElementById("brand-filter");
+      const total = cat.subs.reduce((n, s) => n + s.items.length, 0);
+      bf.innerHTML = `<span class="brand-filter__label">Производитель</span>
+        <button class="chip is-active" data-brand-filter="">Все · ${total}</button>` +
+        brands.map(b => `<button class="chip" data-brand-filter="${esc(b)}">${b} · ${brandCount[b]}</button>`).join("");
+      bf.hidden = false;
+      bf.addEventListener("click", e => {
+        const btn = e.target.closest("[data-brand-filter]");
+        if (!btn) return;
+        const b = btn.dataset.brandFilter;
+        bf.querySelectorAll(".chip").forEach(c => c.classList.toggle("is-active", c === btn));
+        document.querySelectorAll(".sub-block").forEach(block => {
+          let shown = 0;
+          block.querySelectorAll(".prod").forEach(p => { const ok = !b || p.dataset.brand === b; p.hidden = !ok; if (ok) shown++; });
+          block.hidden = shown === 0;
+          const cnt = block.querySelector("[data-count]");
+          if (cnt) cnt.textContent = `${shown} поз.`;
+        });
+      });
+    }
 
     initLayout();
 

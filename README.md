@@ -7,8 +7,8 @@
 
 ## Страницы
 - `index.html` — главная
-- `catalog.html` — все 12 направлений
-- `category.html?c=uzi` — направление (uzi, kt, mrt, inj, xray, angio, nuc, func, reanim, monitor, physio, it)
+- `catalog.html` — все 13 направлений (ассортимент ТД «Пульс», 305 позиций)
+- `category.html?c=uzi` — направление (uzi, kt, mrt, inj, xray, angio, nuc, rt, func, reanim, monitor, physio, it)
 - `services.html` — услуги + trade-in
 - `service.html` — сервис и гарантия
 - `about.html` — о компании
@@ -18,7 +18,7 @@
 ## Где что менять
 - Лицензии — `assets/js/layout.js`, `SITE.licenses` (блок появится сам)
 - Телефон, почта, адрес — `assets/js/layout.js`, объект `SITE` (+ вручную в блоках «Призыв» на страницах и в `contacts.html`)
-- Модели в каталоге — `assets/js/catalog-data.js`
+- Модели в каталоге — `assets/js/catalog-data.js` (собран из ассортимента ТД «Пульс» скриптом `project/m-aktiv-tools/build_catalog.py`; чтобы обновить — скачать свежий список товаров Пульса и запустить скрипт заново)
 - Услуги — `assets/js/services-data.js`
 - Цвета и шрифты — начало `assets/css/style.css`
 
