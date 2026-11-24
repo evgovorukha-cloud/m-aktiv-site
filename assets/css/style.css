@@ -566,3 +566,18 @@ p { margin: 0; }
 .brand-filter .chip { background: transparent; }
 .brand-filter .chip.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
 .prod[hidden], .sub-block[hidden] { display: none; }
+@media (max-width: 560px) {
+  .subnav, .brand-filter {
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); padding-bottom: 4px;
+  }
+  .subnav::-webkit-scrollbar, .brand-filter::-webkit-scrollbar { display: none; }
+  .subnav .chip, .brand-filter .chip, .brand-filter__label { white-space: nowrap; flex-shrink: 0; }
+  .subnav { margin-bottom: 20px; }
+  .brand-filter { margin: 0 0 32px; }
+}
+@media (max-width: 560px) {
+  .prod__visual { aspect-ratio: 5 / 2; }
+  .prod__visual svg { width: 22%; }
+  .prod__body { padding: 16px; }
+}

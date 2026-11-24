@@ -107,7 +107,8 @@ function renderSearchResults(q) {
   }
   const found = runSearch(q);
   const cats = found.filter(e => e.kind === "cat").slice(0, 4);
-  const items = found.filter(e => e.kind === "item").slice(0, 12);
+  const allItems = found.filter(e => e.kind === "item");
+  const items = allItems.slice(0, 12);
   if (!cats.length && !items.length) {
     box.innerHTML = `<div class="search__empty"><p>По запросу «${escHTML(q)}» ничего не нашлось.</p>
       <p>Мы работаем с ведущими производителями — подберём оборудование под задачу.</p>
@@ -124,7 +125,8 @@ function renderSearchResults(q) {
       <a class="search__row" href="category.html?c=${e.c.id}&item=${encodeURIComponent(itemSlug(e.it))}">
         <span class="search__ico">${ICONS[e.c.icon]}</span>
         <span><b>${itemTitle(e.it)}</b><small>${e.it.type} · ${e.c.short}</small></span>
-      </a>`).join("")}</div>` : "");
+      </a>`).join("")}</div>` : "") +
+    (allItems.length > items.length ? `<p class="search__hint" style="margin-top:14px">Показаны ${items.length} из ${allItems.length} моделей — уточните запрос, например «${escHTML(q)} УЗИ» или «${escHTML(q)} КТ».</p>` : "");
 }
 function renderSearch() {
   const el = document.createElement("div");
